@@ -3,7 +3,7 @@ from tokens import *
 
 class Lexer:
     def __init__(self, input):
-        self.source = input + '/n'
+        self.source = input + '\n'
         self.curChar = ''
         self.curPos = -1
         self.nextChar();
@@ -61,6 +61,10 @@ class Lexer:
             token = Token(self.curChar, TokenType.ASTERISK)
         elif self.curChar == '/':
             token = Token(self.curChar, TokenType.SLASH)
+        elif self.curChar == '\n':
+            token = Token(self.curChar, TokenType.NEWLINE)
+        elif self.curChar == '\0':
+            token = Token(' ', TokenType.EOF)
         elif self.curChar == '=':
             if self.peek() == '=':
                 prevChar = self.curChar
@@ -89,10 +93,7 @@ class Lexer:
                 token = Token(prevChar + self.curChar, TokenType.NOTEQ)
             else:
                 self.abort("! not followed by =")
-        elif self.curChar == '\n':
-            token = Token(self.curChar, TokenType.NEWLINE)
-        elif self.curChar == '\0':
-            token = Token('', TokenType.EOF)
+
 
         #     some strings
 
@@ -133,7 +134,7 @@ class Lexer:
                 token = Token(stringText, ident)
             else:
                 self.legalvarname(stringText)
-                token = Token(stringText, TokenType.LABEL)
+                token = Token(stringText, TokenType.IDENT)
 
 
         else:
